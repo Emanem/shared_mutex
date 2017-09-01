@@ -1,13 +1,13 @@
 # shared_mutex
 A C++11 shared mutex with high emphasis on performance.
 
-Please note this is a template library (released under LGPLv3) hence the main itself it's simply a test to show the performance against a `std::mutex`; the current version compiles on Linux, still it should be easy to adapt to Windows or other architectures.
+Please note this is a template library (released under LGPLv3) hence the main itself is simply a test to show the performance against a `std::mutex`; the current version compiles on Linux, still it should be easy to adapt to Windows or other architectures.
 
 ## Building
 Simply invoke `make` (`make release` for optimized build) and the main should compile.
 
 ## Running
-The main is a simple test for performance. What is does is sharing two `size_t` varaibles and then increment them from one thread evey *w_freq* loops and just reading both of them from other threads.
+The main is a simple test for performance. What is does is sharing two `size_t` variables and then increment them from one thread evey *w_freq* loops and just reading both of them from other threads.
 This is to reproduce the test case of *many R/O - less R/W*, where this kind of `ema::shared_mutex` excels.
 
 Output is going to be a sort-of-table showing the performance of the benchmark. As example
@@ -44,7 +44,7 @@ Quite the **difference**, isn't it? :-)
 Feel free to copy the file `shared_mutex.h` and include it wherever needed; see [license](#license).
 
 ## How do I use it in my code?
-After including the libray, one can use the utility classes `ema::x_lock` and `ema::s_lock` for a nifty RAII e*X*clusive and *S*hared lock respectively. As exmaple:
+After including the libray, one can use the utility classes `ema::x_lock` and `ema::s_lock` for a nifty RAII e*X*clusive and *S*hared lock respectively. As example:
 ``` c++
 ema::shared_mutex<4>	sm;
 if(write_access) {
@@ -59,7 +59,7 @@ if(read_access) {
 ```
 
 ### What is this class a template?
-I could make this class a stadard class (i.e. no template) but being a template allows specifying how many buckets (i.e. the argument to the template) at compile them, thus reducing and unrolling loops in case the compiler feels to be particularly frisky.
+I could make this class a stadard class (i.e. no template) but being a template allows specifying how many buckets (i.e. the argument to the template) at compile them, thus allowing for compilte time loop unrolling in case the compiler feels to be particularly frisky.
 
 In all honesty, this template can be easily adapted to be a standard class and the number of buckets to be passed at *run-time*. It's a trivial exercise left to the reader :-)
 

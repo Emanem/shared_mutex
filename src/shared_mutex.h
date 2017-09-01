@@ -41,7 +41,7 @@ namespace ema {
 		// one entry only of 'el_' during its
 		// lifetime
 		struct entry_lock {
-			const static size_t	W_MASK = 0x8000000000000000,
+			const static uint64_t	W_MASK = 0x8000000000000000,
 						R_MASK = ~W_MASK;
 			
 			// purpose ot this variable is to hold

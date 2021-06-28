@@ -20,6 +20,7 @@
 #include <iostream>
 #include <list>
 #include <mutex>
+#include <functional>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include "shared_mutex.h"
@@ -108,19 +109,19 @@ int main(int argc, char *argv[]) {
 				"ema::shared_mutex",
 				[&]() { ema::x_lock<N_BUCKETS> l_(sm); ++a; ++b; },
 				[&]() { ema::s_lock<N_BUCKETS> l_(sm); if(a != b) throw std::runtime_error("Fail in test!"); },
-				4,
+				N_BUCKETS,
 				32*1024*1024,
 				w_freq_arr[i],
-				4
+				N_BUCKETS
 			);
 			microbench::RW_test(
 				"std::mutex",
 				[&]() { std::lock_guard<std::mutex> l_(mtx); ++a; ++b; },
 				[&]() { std::lock_guard<std::mutex> l_(mtx); if(a != b) throw std::runtime_error("Fail in test!"); },
-				4,
+				N_BUCKETS,
 				32*1024*1024,
 				w_freq_arr[i],
-				4
+				N_BUCKETS
 			);
 		}
 	} catch(const std::exception& e) {

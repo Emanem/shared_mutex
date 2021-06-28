@@ -40,6 +40,42 @@ The same when using a `std::mutex` has been:
 
 Quite the **difference**, isn't it? :-)
 
+*Updates*
+
+Moved my rig to a [5950x](https://www.amd.com/en/products/cpu/amd-ryzen-9-5950x) and run the same test (4 threads):
+```
+  real,  user,   sys,              mutex_type
+  0.29,  0.93,  0.16,       ema::shared_mutex	(4,33554432,1024,4)
+  4.06,  5.51,  9.51,              std::mutex	(4,33554432,1024,4)
+  0.38,  1.12,  0.30,       ema::shared_mutex	(4,33554432,512,4)
+  4.23,  5.66, 10.02,              std::mutex	(4,33554432,512,4)
+  0.51,  1.45,  0.49,       ema::shared_mutex	(4,33554432,256,4)
+  4.28,  5.57, 10.28,              std::mutex	(4,33554432,256,4)
+  0.84,  2.25,  0.80,       ema::shared_mutex	(4,33554432,128,4)
+  4.60,  5.81, 11.11,              std::mutex	(4,33554432,128,4)
+  3.03,  7.62,  3.52,       ema::shared_mutex	(4,33554432,16,4)
+  6.95,  7.93, 17.04,              std::mutex	(4,33554432,16,4)
+ 10.75, 27.50, 13.37,       ema::shared_mutex	(4,33554432,4,4)
+  7.32,  8.24, 17.58,              std::mutex	(4,33554432,4,4)
+```
+And then with 16 threads (number of physical cores on this CPU):
+```
+  real,  user,   sys,              mutex_type
+  1.29,  8.23,  8.01,       ema::shared_mutex	(16,33554432,1024,16)
+ 15.72, 22.81,215.80,              std::mutex	(16,33554432,1024,16)
+  1.97, 12.93, 12.56,       ema::shared_mutex	(16,33554432,512,16)
+ 16.38, 23.04,228.58,              std::mutex	(16,33554432,512,16)
+  2.88, 19.64, 18.18,       ema::shared_mutex	(16,33554432,256,16)
+ 17.45, 24.63,242.72,              std::mutex	(16,33554432,256,16)
+  4.39, 32.54, 26.16,       ema::shared_mutex	(16,33554432,128,16)
+ 19.40, 26.51,269.83,              std::mutex	(16,33554432,128,16)
+ 20.21,209.27, 88.88,       ema::shared_mutex	(16,33554432,16,16)
+ 32.93, 43.14,453.16,              std::mutex	(16,33554432,16,16)
+ 73.96,819.51,312.90,       ema::shared_mutex	(16,33554432,4,16)
+ 33.63, 43.01,462.74,              std::mutex	(16,33554432,4,16)
+```
+Clearly shows where this type of mutex excels (low write/high read frequency).
+
 ## How do I include in my project(s)?
 Feel free to copy the file `shared_mutex.h` and include it wherever needed; see [license](#license).
 
